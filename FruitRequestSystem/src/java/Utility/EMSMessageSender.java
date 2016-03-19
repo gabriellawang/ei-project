@@ -1,4 +1,4 @@
-package Model;
+package Utility;
 
 
 import java.util.logging.Level;
@@ -54,7 +54,7 @@ public class EMSMessageSender {
             message.setText(xmlInput);
             if(reply){
                 //message.setJMSReplyTo(session.createTemporaryQueue());
-                Destination rplDestination = session.createQueue("q.receiveorder");
+                Destination rplDestination = session.createQueue("q.menu");
                 rplConsumer = session.createConsumer(rplDestination);
             }
             producer.send(message);

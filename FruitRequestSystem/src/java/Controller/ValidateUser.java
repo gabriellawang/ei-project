@@ -6,10 +6,13 @@
 package Controller;
 
 import Model.Customer;
-import Model.CustomerDAO;
-import Model.EMSMessageSender;
+import Model.Vendor;
+import Utility.CustomerDAO;
+import Utility.EMSMessageSender;
+import Utility.XMLParser;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +38,8 @@ public class ValidateUser extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        PrintWriter out = response.getWriter();
+        try {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             int postalCode = Integer.parseInt(request.getParameter("postal code"));
@@ -43,23 +47,32 @@ public class ValidateUser extends HttpServlet {
 
             Customer customer = CustomerDAO.retrieveCustomer(username);
             if (customer == null) {
+                //validate the login information: when username is incorrect
                 request.setAttribute("errMsg", "Invalid username/password!");
                 RequestDispatcher view = request.getRequestDispatcher("login.jsp");
                 view.forward(request, response);
             } else {
                 if (customer.getPassword().equals(password)) {
-                    //session.setAttribute("customer", customer);
-                    //session.setAttribute("postalCode", postalCode);
-                    //response.sendRedirect("order.jsp");
-                    String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><search_creteria>"+"<customer_id>"+username+"</customer_id><postal_code>"+postalCode+"</postal_code></search_creteria>";
-                    EMSMessageSender msgSender = new EMSMessageSender("q.request.search");
-                    String jmsOutput = msgSender.sendMessage(xml,true);
+                    //when customer login successfully, get the region name according to the postal code(we assume postal code is always valid)
+
+                    String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><search_creteria>" + "<customer_id>" + username + "</customer_id><postal_code>" + postalCode + "</postal_code></search_creteria>";
+                    EMSMessageSender msgSender = new EMSMessageSender("q.requestregion");
+                    String jmsOutput = msgSender.sendMessage(xml, true);
+                    XMLParser xp = new XMLParser(jmsOutput);
+                    ArrayList<Vendor> vList = xp.getParsingResult();
+                    session.setAttribute("customer", customer);
+                    session.setAttribute("postalCode", postalCode);
+                    session.setAttribute("vendorList", vList);
+                    response.sendRedirect("order.jsp");
                 } else {
+                    // when password is incorrect
                     request.setAttribute("errMsg", "Invalid username/password!");
                     RequestDispatcher view = request.getRequestDispatcher("login.jsp");
                     view.forward(request, response);
                 }
             }
+        } finally {
+            out.close();
         }
     }
 
