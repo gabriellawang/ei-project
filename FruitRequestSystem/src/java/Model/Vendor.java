@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author gabriellawang
  */
 public class Vendor {
-    
+
     private String name;
     private ArrayList<Package> pkgList;
 
@@ -40,9 +40,9 @@ public class Vendor {
     public ArrayList<Package> getPkgList() {
         return pkgList;
     }
-    
-    public void addPkg(Package pkg){
+
+    public void addPkg(Package pkg) {
         pkgList.add(pkg);
     }
-    
+
 }

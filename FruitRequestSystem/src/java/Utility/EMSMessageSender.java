@@ -1,6 +1,5 @@
 package Utility;
 
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.Connection;
@@ -11,6 +10,7 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+
 public class EMSMessageSender {
 
     //String serverUrl = "10.124.9.103";
@@ -19,23 +19,25 @@ public class EMSMessageSender {
     String password = null;
     String queueName = null;
 
-
     Connection connection = null;
     Session session = null;
     MessageConsumer msgConsumer = null;
     Destination destination = null;
     MessageConsumer rplConsumer = null;
-    public EMSMessageSender(String queueName){
+
+    public EMSMessageSender(String queueName) {
         this.queueName = queueName;
     }
-    public EMSMessageSender(String queueName,String server){
+
+    public EMSMessageSender(String queueName, String server) {
         this.queueName = queueName;
-        this.serverUrl =server;
+        this.serverUrl = server;
     }
-    public String sendMessage(String xmlInput, boolean reply){
-        
+
+    public String sendMessage(String xmlInput, boolean reply) {
+
         String msgText = null;
-        try{
+        try {
             System.out.println("Preparing jms sender");
             //set server URL
             ConnectionFactory factory = new com.tibco.tibjms.TibjmsConnectionFactory(serverUrl);
@@ -47,40 +49,38 @@ public class EMSMessageSender {
             connection.start();
             destination = session.createQueue(queueName);
             MessageProducer producer = session.createProducer(destination);
-            
+
             //Destination rplDestination = session.createTemporaryQueue();
-            
             TextMessage message = session.createTextMessage();
             message.setText(xmlInput);
-            if(reply){
+            if (reply) {
                 //message.setJMSReplyTo(session.createTemporaryQueue());
                 Destination rplDestination = session.createQueue("q.menu");
                 rplConsumer = session.createConsumer(rplDestination);
             }
             producer.send(message);
             System.out.println(message.toString());
-            
+
             //-------------receive message
-            if (reply){
+            if (reply) {
                 System.out.println("Waiting for reply message");
-                TextMessage replyMsg = (TextMessage)rplConsumer.receive(20000);
-                if (replyMsg==null){
+                TextMessage replyMsg = (TextMessage) rplConsumer.receive(20000);
+                if (replyMsg == null) {
                     throw new Exception("no return");
                 }
                 System.out.println(replyMsg.toString());
                 msgText = replyMsg.getText();
                 //System.out.println("*********"+msgText);
             }
-            
+
             session.close();
             connection.close();
-        }catch(JMSException exc){
+        } catch (JMSException exc) {
             exc.printStackTrace();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
         return msgText;
     }
-    
 
 }

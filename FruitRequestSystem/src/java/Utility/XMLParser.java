@@ -13,8 +13,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 public class XMLParser extends DefaultHandler {
+
     String tmpValue;
     String xmlStr;
     //String ns = "ns:";
@@ -23,20 +23,21 @@ public class XMLParser extends DefaultHandler {
     Package pkg;
     Vendor vdr;
     ArrayList<Vendor> vList = new ArrayList<>();
-    
-    
+
     public XMLParser(String xmlStr) {
         this.xmlStr = xmlStr;
         vList = new ArrayList<>();
         parseDocument();
-        
+
     }
-    public Object[] getParsingResult(){
+
+    public Object[] getParsingResult() {
         Object[] toreturn = new Object[2];
         toreturn[0] = region;
         toreturn[1] = vList;
         return toreturn;
     }
+
     private void parseDocument() {
         // parse
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -58,41 +59,42 @@ public class XMLParser extends DefaultHandler {
         // if current element is book , create new book
         // clear tmpValue on start of element
         tmpValue = "";
-        if (elementName.equalsIgnoreCase(ns+"vendor")) {
+        if (elementName.equalsIgnoreCase(ns + "vendor")) {
             vdr = new Vendor();
         }
-        if (elementName.equalsIgnoreCase(ns+"packages")) {
+        if (elementName.equalsIgnoreCase(ns + "packages")) {
             pkg = new Package();
         }
- 
 
     }
+
     @Override
     public void endElement(String s, String s1, String element) throws SAXException {
         // if end of book element add to list
-        if (element.equals(ns+"vendor")) {
+        if (element.equals(ns + "vendor")) {
             vList.add(vdr);
         }
-        if (element.equals(ns+"packages")) {
+        if (element.equals(ns + "packages")) {
             vdr.addPkg(pkg);
         }
         // if current element is publisher
-        if(element.equalsIgnoreCase(ns + "region_name")){
+        if (element.equalsIgnoreCase(ns + "region_name")) {
             region = tmpValue;
         }
-        if (element.equalsIgnoreCase(ns+"vendor")) {
+        if (element.equalsIgnoreCase(ns + "vendor")) {
             vdr.setName(tmpValue);
         }
-        if (element.equalsIgnoreCase(ns+"package_name")) {
+        if (element.equalsIgnoreCase(ns + "package_name")) {
             pkg.setName(tmpValue);
         }
-        if (element.equalsIgnoreCase(ns+"package_detail")) {
+        if (element.equalsIgnoreCase(ns + "package_detail")) {
             pkg.setDescription(tmpValue);
         }
-        if (element.equalsIgnoreCase(ns+"package_price")) {
+        if (element.equalsIgnoreCase(ns + "package_price")) {
             pkg.setPrice(Double.parseDouble(tmpValue));
         }
     }
+
     @Override
     public void characters(char[] ac, int i, int j) throws SAXException {
         tmpValue = new String(ac, i, j);
