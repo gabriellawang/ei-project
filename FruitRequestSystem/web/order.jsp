@@ -21,17 +21,21 @@
             Customer c = (Customer) session.getAttribute("customer");
             String cName = c.getName();
             ArrayList<Vendor> vList = (ArrayList<Vendor>) session.getAttribute("vendorList");
+            String region = (String) session.getAttribute("region");
         %>
-        <b>Welcome, <%=cName%>! Start your order now.</b><br>
+        <b>Welcome, <%=cName%>! You are currently at <%=region%>. <br> 
+            Here are the vendors nearby.<br>
+            Start your order now.<br></b>
 
         <%
             if (vList != null && !vList.isEmpty()) {
+                //out.println(vList.size());
                 for (int i = 0; i < vList.size(); i++) {
                     String vName = vList.get(i).getName();
                     ArrayList<Package> pList = vList.get(i).getPkgList();
         %>
         Vendor: <%=vName%><br>
-        <table>
+        <table border="1">
             <tr>
                 <th>Package Name</th><th>Description</th><th>Price</th>
             </tr>
@@ -43,7 +47,7 @@
                 double pri = p.getPrice();
                 %>
                 <tr>
-                    <td><%=pName%></td><td><%=des%></td><td><%=pri%></td>
+                    <td><%=pName%></td><td><%=des%></td><td>S$ <%=pri%></td>
                 </tr>
             <%
             }

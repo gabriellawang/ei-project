@@ -59,10 +59,13 @@ public class ValidateUser extends HttpServlet {
                     EMSMessageSender msgSender = new EMSMessageSender("q.requestregion");
                     String jmsOutput = msgSender.sendMessage(xml, true);
                     XMLParser xp = new XMLParser(jmsOutput);
-                    ArrayList<Vendor> vList = xp.getParsingResult();
+                    Object[] result = xp.getParsingResult();
+                    String region = (String) result[0];
+                    ArrayList<Vendor> vList = (ArrayList<Vendor>) result[1];
                     session.setAttribute("customer", customer);
                     session.setAttribute("postalCode", postalCode);
                     session.setAttribute("vendorList", vList);
+                    session.setAttribute("region", region);
                     response.sendRedirect("order.jsp");
                 } else {
                     // when password is incorrect

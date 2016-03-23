@@ -238,7 +238,7 @@ public class VendorSystem implements ExceptionListener {
         ArrayList<String> nameList = new ArrayList<String>();
         
         
-        String sql1 = "SELECT distinct m.vendor,name,description,price FROM menus m, deliveryscope s WHERE region like '" + region + "' and s.vendor=m.vendor";
+        String sql1 = "SELECT distinct m.vendor FROM menus m, deliveryscope s WHERE region like '" + region + "' and s.vendor=m.vendor";
         StringBuffer outputXML = new StringBuffer();
 
         try{
@@ -256,6 +256,8 @@ public class VendorSystem implements ExceptionListener {
                 
             }
             
+			outputXML.append("<menu_list>");
+			outputXML.append("<region_name>" + region + "</region_name>");
             for(String rName: nameList){
                 String sql2 = "select name,description,price from menus where vendor = '"+rName +"'";
                 //sql2 += rName;
@@ -275,6 +277,7 @@ public class VendorSystem implements ExceptionListener {
                 outputXML.append("</menu>");
                 System.out.println("---------------------------------------------");
             }
+			outputXML.append("</menu_list>");
 
             
         } catch(Exception e){

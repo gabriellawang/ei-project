@@ -17,6 +17,7 @@ public class Vendor {
     private ArrayList<Package> pkgList;
 
     public Vendor() {
+        pkgList = new ArrayList<>();
     }
 
     public Vendor(String name) {

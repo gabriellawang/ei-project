@@ -19,9 +19,10 @@ public class XMLParser extends DefaultHandler {
     String xmlStr;
     //String ns = "ns:";
     String ns = "";
+    String region = "";
     Package pkg;
     Vendor vdr;
-    ArrayList<Vendor> vList;
+    ArrayList<Vendor> vList = new ArrayList<>();
     
     
     public XMLParser(String xmlStr) {
@@ -30,8 +31,11 @@ public class XMLParser extends DefaultHandler {
         parseDocument();
         
     }
-    public ArrayList<Vendor> getParsingResult(){
-        return vList;
+    public Object[] getParsingResult(){
+        Object[] toreturn = new Object[2];
+        toreturn[0] = region;
+        toreturn[1] = vList;
+        return toreturn;
     }
     private void parseDocument() {
         // parse
@@ -43,6 +47,7 @@ public class XMLParser extends DefaultHandler {
             System.out.println("ParserConfig error");
         } catch (SAXException e) {
             System.out.println("SAXException : xml not well formed");
+            //System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println("IO error");
         }
@@ -52,9 +57,9 @@ public class XMLParser extends DefaultHandler {
     public void startElement(String s, String s1, String elementName, Attributes attributes) throws SAXException {
         // if current element is book , create new book
         // clear tmpValue on start of element
+        tmpValue = "";
         if (elementName.equalsIgnoreCase(ns+"vendor")) {
             vdr = new Vendor();
-            vdr.addPkg(pkg);
         }
         if (elementName.equalsIgnoreCase(ns+"packages")) {
             pkg = new Package();
@@ -72,6 +77,9 @@ public class XMLParser extends DefaultHandler {
             vdr.addPkg(pkg);
         }
         // if current element is publisher
+        if(element.equalsIgnoreCase(ns + "region_name")){
+            region = tmpValue;
+        }
         if (element.equalsIgnoreCase(ns+"vendor")) {
             vdr.setName(tmpValue);
         }

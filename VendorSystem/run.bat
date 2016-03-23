@@ -1,2 +1,2 @@
-java -cp class;lib/* VendorSystem -queue q.requestregion
+java -cp class;lib/* VendorSystem -queue q.receiveregion
 pause
