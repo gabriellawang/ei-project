@@ -6,6 +6,7 @@
 package Controller;
 
 import Model.Order;
+import Model.Package;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -41,7 +42,10 @@ public class AddOrder extends HttpServlet {
             String p = request.getParameter("pri");
             double price = Double.parseDouble(p);
             int qty = Integer.parseInt(request.getParameter("quantity"));
-            Order order = new Order(pName, price, qty);
+            String vendor = request.getParameter("vendor");
+            Package pack = new Package(pName, "nil", price, qty);
+            Order order = new Order(vendor);
+            order.addItems(pack);
             ArrayList<Order> oList = (ArrayList<Order>) session.getAttribute("order-list");
             if(oList == null){
                 oList = new ArrayList<>();

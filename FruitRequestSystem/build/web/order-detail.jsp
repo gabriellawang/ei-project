@@ -10,6 +10,7 @@
     String name = request.getParameter("name");
     String description = request.getParameter("desc");
     String price = request.getParameter("price");
+    String vendor = request.getParameter("vendor");
 %>
 <html>
     <head>
@@ -19,9 +20,11 @@
     <body>
         <b>Description: </b><%=description%><br>
         <b>Price: </b>S$ <%=price%><br>
+        <b>Vendor: </b><%=vendor%>
         <form action="add-order">
             <input type="hidden" name="name" value='<%=name%>'/>
             <input type="hidden" name="pri" value='<%=price%>'/>
+            <input type='hidden' name='vendor' value='<%=vendor%>'/>
             Choose the quantity: <input type='number' name='quantity'/><br>
             <input type='submit' value='Add to Cart'/>
         </form>

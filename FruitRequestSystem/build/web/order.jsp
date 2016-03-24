@@ -67,7 +67,7 @@
                         double pri = p.getPrice();
                 %>
                 <tr>
-                    <td><a href="order-detail.jsp?name=<%=pName%>&desc=<%=des%>&price=<%=pri%>"><%=pName%></a></td><td><%=des%></td><td>S$ <%=pri%></td>
+                    <td><a href="order-detail.jsp?name=<%=pName%>&desc=<%=des%>&price=<%=pri%>&vendor=<%=vName%>"><%=pName%></a></td><td><%=des%></td><td>S$ <%=pri%></td>
                 </tr>
                 <%
                     }

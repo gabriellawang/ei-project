@@ -5,32 +5,35 @@
  */
 package Model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author gabriellawang
  */
 public class Order {
 
-    private String pkgName;
-    private double unitPrice;
-    private int qty;
+    private String vendorName;
+    private ArrayList<Package> items = new ArrayList<Package>();
 
-    public Order(String pkgName, double unitPrice, int qty) {
-        this.pkgName = pkgName;
-        this.unitPrice = unitPrice;
-        this.qty = qty;
+    public Order(String vendorName) {
+        this.vendorName = vendorName;
     }
 
-    public String getPkgName() {
-        return pkgName;
+    public String getVendorName() {
+        return vendorName;
     }
 
-    public double getUnitPrice() {
-        return unitPrice;
+    public ArrayList<Package> getItems() {
+        return items;
     }
 
-    public int getQty() {
-        return qty;
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public void addItems(Package p) {
+        items.add(p);
     }
 
 }
