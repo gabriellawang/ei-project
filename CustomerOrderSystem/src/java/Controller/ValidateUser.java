@@ -9,6 +9,7 @@ import Model.Customer;
 import Model.Vendor;
 import Utility.CustomerDAO;
 import Utility.EMSMessageSender;
+import Utility.VendorDAO;
 import Utility.XMLParser;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,7 +43,8 @@ public class ValidateUser extends HttpServlet {
         try {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            int postalCode = Integer.parseInt(request.getParameter("postal code"));
+            String code = request.getParameter("postal code");
+            int postalCode = 0;
             HttpSession session = request.getSession();
 
             Customer customer = CustomerDAO.retrieveCustomer(username);
@@ -51,10 +53,14 @@ public class ValidateUser extends HttpServlet {
                 request.setAttribute("errMsg", "Invalid username/password!");
                 RequestDispatcher view = request.getRequestDispatcher("login.jsp");
                 view.forward(request, response);
+            } else if(code.isEmpty()){
+                request.setAttribute("errMsg", "Empty Postal Code!");
+                RequestDispatcher view = request.getRequestDispatcher("login.jsp");
+                view.forward(request, response);
             } else {
                 if (customer.getPassword().equals(password)) {
                     //when customer login successfully, get the region name according to the postal code(we assume postal code is always valid)
-
+                    postalCode = Integer.parseInt(code);
                     String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><search_creteria>" + "<customer_id>" + username + "</customer_id><postal_code>" + postalCode + "</postal_code></search_creteria>";
                     EMSMessageSender msgSender = new EMSMessageSender("q.requestregion");
                     String jmsOutput = msgSender.sendMessage(xml, true);
@@ -62,6 +68,10 @@ public class ValidateUser extends HttpServlet {
                     Object[] result = xp.getParsingResult();
                     String region = (String) result[0];
                     ArrayList<Vendor> vList = (ArrayList<Vendor>) result[1];
+                    for(int i = 0; i < vList.size(); i++){
+                        String name = vList.get(i).getName();
+                        vList.get(i).setFullName(VendorDAO.retrieveFullName(name));
+                    }
                     session.setAttribute("customer", customer);
                     session.setAttribute("postalCode", postalCode);
                     session.setAttribute("vendorList", vList);

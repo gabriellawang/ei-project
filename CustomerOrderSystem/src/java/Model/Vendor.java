@@ -14,14 +14,17 @@ import java.util.ArrayList;
 public class Vendor {
 
     private String name;
+    private String fullName;
     private ArrayList<Package> pkgList;
 
     public Vendor() {
+        fullName = "";
         pkgList = new ArrayList<>();
     }
 
     public Vendor(String name) {
         this.name = name;
+        fullName = "";
         pkgList = new ArrayList<>();
     }
 
@@ -33,12 +36,20 @@ public class Vendor {
         this.pkgList = pkgList;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getName() {
         return name;
     }
 
     public ArrayList<Package> getPkgList() {
         return pkgList;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public void addPkg(Package pkg) {

@@ -3,7 +3,7 @@
     Created on : Mar 25, 2016, 1:26:06 PM
     Author     : gabriellawang
 --%>
-
+<%@include file="protect.jsp" %>
 <%@page import="Utility.EMSMessageSender"%>
 <%@page import="Model.Customer"%>
 <%@page import="Model.Package" %>
