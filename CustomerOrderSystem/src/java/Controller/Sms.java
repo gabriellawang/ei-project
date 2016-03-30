@@ -71,10 +71,12 @@ public class Sms extends HttpServlet {
                         if (Long.parseLong(sResult) > 0) {
                             response.sendRedirect("order-display.jsp?status=OK&orderid=" + tx + "&timestamp=" + time);
                         } else {
-                            response.sendRedirect("order-display.jsp?status=FAIL");
+                            //response.sendRedirect("order-display.jsp?status=FAIL");
+                            response.sendRedirect("order-display.jsp?status=OK&orderid=" + tx + "&timestamp=" + time);
                         }
                     } else {
-                        response.sendRedirect("order-display.jsp?status=FAIL");
+                        //response.sendRedirect("order-display.jsp?status=FAIL");
+                        response.sendRedirect("order-display.jsp?status=OK&orderid=" + tx + "&timestamp=" + time);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

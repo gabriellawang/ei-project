@@ -12,13 +12,13 @@
 <script>
     function popup1() {
         confirm("Oops! Your order was not successfully. Please check you account balance. You will be redirected to Order page.");
-    }
-    function popup2() {
-        confirm("You have successfully ordered the fruit! ");
+        window.location = "order.jsp";
     }
 </script>
 <%
     String status = request.getParameter("status");
+    String region = (String) session.getAttribute("region");
+    System.out.println(status);
     if (status.equals("FAIL")) {
         //order fails
         %>
@@ -26,7 +26,7 @@
             popup1();
         </script>
         <%
-        response.sendRedirect("order.jsp");
+        //response.sendRedirect("order.jsp");
     } else {
         //order successed
         String orderId = request.getParameter("orderid");
@@ -60,14 +60,9 @@
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + 
                 "<order><orderid>" + orderId + "</orderid><totalPrice>" + total + "</totalPrice><timestamp>" + timestamp + "</timestamp><username>" + customer.getUsername() +
                 "</username><email>" + customer.getEmail() + "</email><phone>" + customer.getPhone() + "</phone><address>" + address + "</address>" + 
-                "<postcode>" + postcode + "</postcode><storeName>" + vendor + "</storeName>" + pkgxml + "</order>";
+                "<postcode>" + postcode + "</postcode><region>" + region + "</region><storeName>" + vendor + "</storeName>" + pkgxml + "</order>";
         EMSMessageSender msgSender = new EMSMessageSender("q.deliveryinfo");
         msgSender.sendMessage(xml, false);
-        %>
-        <script>
-            popup2();
-        </script>
-        <%
         response.sendRedirect("order.jsp");
     }
 %>

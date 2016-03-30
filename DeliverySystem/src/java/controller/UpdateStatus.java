@@ -5,14 +5,9 @@
  */
 package controller;
 
-import utility.UpdateOrderStatus;
-import java.sql.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,14 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Order;
-import utility.DeliveryDAO;
+import utility.EMSMessageSender;
+import utility.UpdateOrderStatus;
 
 /**
  *
  * @author gabriellawang
  */
-@WebServlet(name = "LoginProcess", urlPatterns = {"/login-process"})
-public class LoginProcess extends HttpServlet {
+@WebServlet(name = "UpdateStatus", urlPatterns = {"/update"})
+public class UpdateStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,28 +38,24 @@ public class LoginProcess extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            String orderID = (String) request.getParameter("id");
+            String status = (String) request.getParameter("status");
             HttpSession session = request.getSession();
-            String id = request.getParameter("id");
-            String pwd = request.getParameter("password");
-            session.setAttribute("userid", id);
-            session.setAttribute("password", pwd);
-            boolean valid = DeliveryDAO.validateUser(id, pwd);
-            String err = "invalid ID or password!";
-            if (!valid) {
-                request.setAttribute("errMsg", err);
-                RequestDispatcher view = request.getRequestDispatcher("home.jsp");
-                view.forward(request, response);
-            } else {
-                ArrayList<Order> unstarted = UpdateOrderStatus.getUnstartedOrder(id);
-                ArrayList<Order> started = UpdateOrderStatus.getStartedOrder(id);
-                ArrayList<Order> finished = UpdateOrderStatus.getFinishedOrder(id);
-                session.setAttribute("unstarted", unstarted);
-                session.setAttribute("started", started);
-                session.setAttribute("finished", finished);
-                session.setAttribute("id", id);
-                response.sendRedirect("update.jsp");
+
+            if(status.equals("unstarted")){
+                UpdateOrderStatus.UpdateStatus(orderID, "started");
+                //send jms msg to inform "order started"
+                EMSMessageSender msgSender = new EMSMessageSender("q.deliveryStatus");
+                msgSender.sendMessage("start", false);
+            }else{
+                UpdateOrderStatus.UpdateStatus(orderID, "finished");
+                //send jms msg to inform "order finished"
+                EMSMessageSender msgSender = new EMSMessageSender("q.deliveryStatus");
+                msgSender.sendMessage("end", false);
             }
-            out.close();
+            String id = (String) session.getAttribute("userid");
+            String pwd = (String) session.getAttribute("password");
+            response.sendRedirect("login-process?id=" + id + "&password=" + pwd);
         }
     }
 

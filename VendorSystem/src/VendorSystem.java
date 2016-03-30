@@ -175,41 +175,47 @@ public class VendorSystem implements ExceptionListener {
     // Handle the message when received.
     public void onMessage(Message message) {
         try {
-            if ((message instanceof TextMessage) && (message.getJMSReplyTo() != null)) {
-                TextMessage requestMessage = (TextMessage) message;
-                System.out.println("\tTime:       " + System.currentTimeMillis() + " ms");
-                System.out.println("\tMessage ID: " + requestMessage.getJMSMessageID());
-                System.out.println("\tCorrel. ID: " + requestMessage.getJMSCorrelationID());
-                System.out.println("\tReply to:   " + requestMessage.getJMSReplyTo());
-                
-                
-                System.out.println("\nReceived request..........");
-                System.out.println("Retrieving available vendor to deliver to: " + requestMessage.getText()+"\n");
-                System.out.println("Current available vendors: ");
-                System.out.println("---------------------------------------------");
-                
-                //System.out.println("\tContents:   " + requestMessage.getText());
-              
-                String unsortedList = retrieveVendorDetails(requestMessage.getText());
+            if (message instanceof TextMessage) {
+				if (message.getJMSReplyTo() != null){
+					TextMessage requestMessage = (TextMessage) message;
+					System.out.println("\tTime:       " + System.currentTimeMillis() + " ms");
+					System.out.println("\tMessage ID: " + requestMessage.getJMSMessageID());
+					System.out.println("\tCorrel. ID: " + requestMessage.getJMSCorrelationID());
+					System.out.println("\tReply to:   " + requestMessage.getJMSReplyTo());
+					
+					
+					System.out.println("\nReceived request..........");
+					System.out.println("Retrieving available vendor to deliver to: " + requestMessage.getText()+"\n");
+					System.out.println("Current available vendors: ");
+					System.out.println("---------------------------------------------");
+					
+					//System.out.println("\tContents:   " + requestMessage.getText());
+				  
+					String unsortedList = retrieveVendorDetails(requestMessage.getText());
 
-   
-                // Prepare reply message and send reply message
-                Destination replyDestination = message.getJMSReplyTo();
-                MessageProducer replyProducer = session.createProducer(replyDestination);
-                TextMessage replyMessage = session.createTextMessage();
-                // Hardcoded the replyMessage to for this example.
-                replyMessage.setText(unsortedList);
-                replyMessage.setJMSCorrelationID(requestMessage.getJMSMessageID());
-                // sending reply message.
-                replyProducer.send(replyMessage);
+	   
+					// Prepare reply message and send reply message
+					Destination replyDestination = message.getJMSReplyTo();
+					MessageProducer replyProducer = session.createProducer(replyDestination);
+					TextMessage replyMessage = session.createTextMessage();
+					// Hardcoded the replyMessage to for this example.
+					replyMessage.setText(unsortedList);
+					replyMessage.setJMSCorrelationID(requestMessage.getJMSMessageID());
+					// sending reply message.
+					replyProducer.send(replyMessage);
 
-                System.out.println("Sent to Fruit Request System for ordering!");
-                //System.out.println("\tTime:       " + System.currentTimeMillis() + " ms");
-                System.out.println("\tMessage ID: " + replyMessage.getJMSMessageID());
-                System.out.println("\tCorrel. ID: " + replyMessage.getJMSCorrelationID());
-                System.out.println("\tReply to:   " + replyMessage.getJMSReplyTo());
-                //System.out.println("\tContents:   " + replyMessage.getText());
-                System.out.println("\tDestination:" + replyMessage.getJMSDestination());
+					System.out.println("Sent to Fruit Request System for ordering!");
+					//System.out.println("\tTime:       " + System.currentTimeMillis() + " ms");
+					System.out.println("\tMessage ID: " + replyMessage.getJMSMessageID());
+					System.out.println("\tCorrel. ID: " + replyMessage.getJMSCorrelationID());
+					System.out.println("\tReply to:   " + replyMessage.getJMSReplyTo());
+					//System.out.println("\tContents:   " + replyMessage.getText());
+					System.out.println("\tDestination:" + replyMessage.getJMSDestination());
+				}else{
+					System.out.println("Incoming message from Delivery System:  " + message);
+					
+				}
+                
             } else {
                 System.out.println("Invalid message detected");
                 System.out.println("\tType:       " + message.getClass().getName());
