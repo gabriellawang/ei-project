@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!-- Created with Liquid XML 2015 Developer Bundle Edition (Education) 13.2.3.6018 (http://www.liquid-technologies.com) -->
+<order xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation = "new_order.xsd">
+    
+	<orderid>jason01</orderid>
+	<totalPrice>29.5</totalPrice>
+	<timestamp>25/03/2016 15:00</timestamp>
+	
+	<username>jason</username>
+    <email>yuan629@msn.com</email>
+    <phone>98752805</phone>
+	<address>80 Stamford Road</address>
+    <postcode>178902</postcode>
+	
+    <storeName>ven2</storeName>
+        <package>
+            <name>pkg1</name>
+			<description>apple+banana+orange</description>
+			<price>5.9</price>
+            <qty>5</qty>
+        </package>
+		
+</order>
