@@ -52,6 +52,8 @@ public class Sms extends HttpServlet {
             if (status.equals("Completed")) {
                 String sMsg = "Confirmed payment. Your order ID is " + tx + ". Your order is on the way.";
                 String sURL = "http://gateway.onewaysms.sg:10002/api.aspx?apiusername=APIXXMSPMYOBY&apipassword=APIXXMSPMYOBYXXMSP&mobileno=" + phone + "&senderid=GrabFruit&languagetype=1&message=" + URLEncoder.encode(sMsg);
+                //below key is invalid
+                //String sURL = "http://gateway.onewaysms.sg:10002/api.aspx?apiusername=APIXXMSPMYOBY&apipassword=APIXXMSPMYOBYXX&mobileno=" + phone + "&senderid=GrabFruit&languagetype=1&message=" + URLEncoder.encode(sMsg);
                 String result = "";
                 HttpURLConnection conn = null;
                 try {

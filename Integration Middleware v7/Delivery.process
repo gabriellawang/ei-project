@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/new_order.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/retrieveRegion.xsd" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/retrieveDuration.xsd" xmlns:pfx3="http://xmlns.tibco.com/body" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/retrieveRoute.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://www.tibco.com/pe/SignalInActivitySchema">
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/new_order.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns4="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/json" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/retrieveRegion.xsd" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/retrieveDuration.xsd" xmlns:pfx3="http://xmlns.tibco.com/body" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/retrieveRoute.xsd" xmlns:pfx6="http://www.tibco.com/pe/SignalInActivitySchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/new_order.xsd" schemaLocation="/new_order.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/retrieveDuration.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/retrieveRegion.xsd" schemaLocation="/retrieveRegion.xsd"/>
@@ -410,7 +410,7 @@
             <pd:serializable>false</pd:serializable>
             <pd:indexSlot>i</pd:indexSlot>
             <pd:activityOutputName/>
-            <pd:repeatCondition>$i=2</pd:repeatCondition>
+            <pd:repeatCondition>$i=1</pd:repeatCondition>
             <pd:accumulateOutput>false</pd:accumulateOutput>
         </config>
         <pd:inputBindings/>
